@@ -13,7 +13,7 @@ public class App {
                 break;
             }
             case TREE :{
-                break;
+                System.out.println(fileService.seeTree(args[1],0));
             }
             case MOVE:{
                 break;

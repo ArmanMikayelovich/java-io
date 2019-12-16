@@ -19,7 +19,7 @@ public interface FileService {
 
     String seeProperties(String filename);
 
-    String seeTree(String directoryName);
+    String seeTree(String directoryName, int tabCount);
 
     void copyFile(String fileName, String destinationFileName);
 
