@@ -94,7 +94,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void writeDataToFile(String fileName, String data) throws IOException {
         File dest = new File(fileName);
-        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(dest),true);) {
+        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(dest), true);) {
             printWriter.write(data);
         }
     }
