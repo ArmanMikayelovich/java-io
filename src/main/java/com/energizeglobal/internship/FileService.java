@@ -13,13 +13,13 @@ import java.io.IOException;
  */
 public interface FileService {
 
-    String PROP = "PROP";
-    String COPY = "COPY";
-    String TREE = "TREE";
-    String MOVE = "MOVE";
-    String RENAME = "RENAME";
-    String READ = "READ";
-    String WRITE = "WRITE";
+    String PROP = "PROP";//ok
+    String COPY = "COPY";//ok
+    String TREE = "TREE";//ok
+    String MOVE = "MOVE";//ok
+    String RENAME = "RENAME";//ok
+    String READ = "READ";//ok
+    String WRITE = "WRITE";//ok
 
     String seeProperties(String filename);
 

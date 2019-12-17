@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.Objects;
 
 public class FileServiceImpl implements FileService {
     @Override
@@ -32,7 +33,7 @@ public class FileServiceImpl implements FileService {
         if (directory.isDirectory()) {
             treeBuilder.append(directory.getName()).append("\n");
             tabCount++;
-            for (File file : directory.listFiles()) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
                 if (!file.isDirectory()) {
                     appendMinuses(treeBuilder, tabCount);
                     treeBuilder.append(file.getName()).append("\n");
@@ -53,7 +54,7 @@ public class FileServiceImpl implements FileService {
         File src = new File(fileName);
         if (src.exists()) {
             File dest = new File(destinationFileName);
-            Files.copy(src.toPath(), dest.toPath(),StandardCopyOption.ATOMIC_MOVE);
+            Files.copy(src.toPath(), dest.toPath());
         } else {
             throw new FileNotFoundException(src.getAbsolutePath() + " not found.");
         }
@@ -81,7 +82,7 @@ public class FileServiceImpl implements FileService {
         if (src.exists()) {
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(src))) {
                 StringBuilder builder = new StringBuilder();
-                bufferedReader.lines().forEach(builder::append);
+                bufferedReader.lines().forEach(line -> builder.append(line).append('\n'));
                 return builder.toString();
             }
         } else {
@@ -93,10 +94,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void writeDataToFile(String fileName, String data) throws IOException {
         File dest = new File(fileName);
-        if (!dest.exists()) {
-            dest.createNewFile();
-        }
-        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(dest));) {
+        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(dest),true);) {
             printWriter.write(data);
         }
     }
