@@ -1,4 +1,7 @@
 package com.energizeglobal.internship;
+
+import java.io.IOException;
+
 /**
  * PROP - see properties of the file
  * TREE - see all files and inner directories of folder
@@ -9,6 +12,7 @@ package com.energizeglobal.internship;
  * WRITE - write data to file
  */
 public interface FileService {
+
     String PROP = "PROP";
     String COPY = "COPY";
     String TREE = "TREE";
@@ -21,14 +25,14 @@ public interface FileService {
 
     String seeTree(String directoryName, int tabCount);
 
-    void copyFile(String fileName, String destinationFileName);
+    void copyFile(String fileName, String destinationFileName) throws IOException;
 
-    void moveFile(String fileName, String destinationName);
+    void moveFile(String fileName, String destinationName) throws IOException;
 
-    void renameFile(String fileName, String newName);
+    void renameFile(String fileName, String newName) throws IOException;
 
-    String readDataFromFile(String filename);
+    String readDataFromFile(String filename) throws IOException;
 
-    void writeDataToFile(String fileName, String data);
+    void writeDataToFile(String fileName, String data) throws IOException;
 
 }

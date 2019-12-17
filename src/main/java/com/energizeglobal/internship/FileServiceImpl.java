@@ -1,6 +1,8 @@
 package com.energizeglobal.internship;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
 public class FileServiceImpl implements FileService {
@@ -32,10 +34,10 @@ public class FileServiceImpl implements FileService {
             tabCount++;
             for (File file : directory.listFiles()) {
                 if (!file.isDirectory()) {
-                   appendMinuses(treeBuilder,tabCount);
+                    appendMinuses(treeBuilder, tabCount);
                     treeBuilder.append(file.getName()).append("\n");
                 } else {
-                   appendMinuses(treeBuilder,tabCount);
+                    appendMinuses(treeBuilder, tabCount);
                     treeBuilder.append(seeTree(file.getAbsolutePath(), tabCount)).append("\n");
 
                 }
@@ -46,34 +48,62 @@ public class FileServiceImpl implements FileService {
         return treeBuilder.toString();
     }
 
-    private void appendMinuses(StringBuilder builder, int count) {
-        for (int x = 0; x < count; x++) {
-            builder.append("--");
+    @Override
+    public void copyFile(String fileName, String destinationFileName) throws IOException {
+        File src = new File(fileName);
+        if (src.exists()) {
+            File dest = new File(destinationFileName);
+            Files.copy(src.toPath(), dest.toPath(),StandardCopyOption.ATOMIC_MOVE);
+        } else {
+            throw new FileNotFoundException(src.getAbsolutePath() + " not found.");
         }
     }
 
     @Override
-    public void copyFile(String fileName, String destinationFileName) {
+    public void moveFile(String fileName, String destinationName) throws IOException {
+        File src = new File(fileName);
+        if (src.exists()) {
+            File dest = new File(destinationName);
+            Files.move(src.toPath(), dest.toPath(), StandardCopyOption.ATOMIC_MOVE);
+        } else {
+            throw new FileNotFoundException(src.getAbsolutePath() + " not found.");
+        }
+    }
+
+    @Override
+    public void renameFile(String fileName, String newName) throws IOException {
+        moveFile(fileName, newName);
+    }
+
+    @Override
+    public String readDataFromFile(String filename) throws IOException {
+        File src = new File(filename);
+        if (src.exists()) {
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(src))) {
+                StringBuilder builder = new StringBuilder();
+                bufferedReader.lines().forEach(builder::append);
+                return builder.toString();
+            }
+        } else {
+            throw new FileNotFoundException(src.getAbsolutePath() + " not found.");
+        }
 
     }
 
     @Override
-    public void moveFile(String fileName, String destinationName) {
-
+    public void writeDataToFile(String fileName, String data) throws IOException {
+        File dest = new File(fileName);
+        if (!dest.exists()) {
+            dest.createNewFile();
+        }
+        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(dest));) {
+            printWriter.write(data);
+        }
     }
 
-    @Override
-    public void renameFile(String fileName, String newName) {
-
-    }
-
-    @Override
-    public String readDataFromFile(String filename) {
-        return null;
-    }
-
-    @Override
-    public void writeDataToFile(String fileName, String data) {
-
+    private void appendMinuses(StringBuilder builder, int count) {
+        for (int x = 0; x < count; x++) {
+            builder.append("--");
+        }
     }
 }
